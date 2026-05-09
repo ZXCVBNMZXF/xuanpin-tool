@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>选品五维安检门 · 达人专用</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #0f0f0f;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #FFD76D, #FF6B6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .sub {
+            font-size: 14px;
+            color: #a0a0a0;
+            margin-top: 8px;
+        }
+        /* 进度条 */
+        .progress-bar {
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 3px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #FFD76D, #FF6B6B);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        /* 维度卡片 */
+        .card {
+            background: #1c1c1e;
+            border-radius: 20px;
+            padding: 28px 20px 24px;
+            margin-bottom: 16px;
+            display: none;
+            border: 1px solid #2c2c2e;
+        }
+        .card.active {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card-num {
+            font-size: 12px;
+            color: #FFD76D;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .card h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .card .question {
+            font-size: 15px;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .card .hint {
+            background: #2a2a2a;
+            border-left: 4px solid #FF6B6B;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #b0b0b0;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        /* 按钮组 */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            flex: 1;
+            padding: 16px 0;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .btn-yes {
+            background: #34C759;
+            color: #000;
+        }
+        .btn-no {
+            background: #FF3B30;
+            color: #fff;
+        }
+        .btn:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+        /* 结果页 */
+        .result {
+            display: none;
+            background: #1c1c1e;
+            border-radius: 20px;
+            padding: 32px 20px;
+            text-align: center;
+            border: 1px solid #2c2c2e;
+            animation: fadeInUp 0.4s ease;
+        }
+        .result.active {
+            display: block;
+        }
+        .result .big-emoji {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        .result h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        .result .detail {
+            font-size: 15px;
+            color: #d0d0d0;
+            text-align: left;
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        .restart-btn {
+            margin-top: 20px;
+            background: #3a3a3c;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+        .restart-btn:active {
+            background: #4a4a4c;
+        }
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #6c6c6e;
+            margin-top: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">🔍</div>
+            <h1>选品五维安检门</h1>
+            <div class="sub">只看品本身 · 不碰数据 · 第一步筛出放心品</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- 维度卡片区 -->
+        <div id="cardsContainer">
+            <!-- 卡片1：视觉可拍性 -->
+            <div class="card active" data-index="0">
+                <div class="card-num">维度 1/5</div>
+                <h2>📸 视觉可拍性</h2>
+                <div class="question">不说话，拿手机对着产品拍30秒。<br>能不能拍到“一眼就牛”的画面？</div>
+                <div class="hint">💬 比如：一擦就亮、一泡就白、一摔不碎。<br>如果只能拍静态口播，这品在抖音没传播基因。</div>
+                <div class="btn-group">
+                    <button class="btn btn-no" onclick="answer(0, false)">🙅 拍不出</button>
+                    <button class="btn btn-yes" onclick="answer(0, true)">✅ 能拍到</button>
+                </div>
+            </div>
+            <!-- 卡片2：场景普适性 -->
+            <div class="card" data-index="1">
+                <div class="card-num">维度 2/5</div>
+                <h2>🔄 场景普适性</h2>
+                <div class="question">你的粉丝，一周会碰到这个场景几次？</div>
+                <div class="hint">💬 油污、收纳、带娃崩溃这类每天都遇得到。<br>低频场景（如露营装备）转化率注定不高。</div>
+                <div class="btn-group">
+                    <button class="btn btn-no" onclick="answer(1, false)">📆 低频场景</button>
+                    <button class="btn btn-yes" onclick="answer(1, true)">📅 天天都遇到</button>
+                </div>
+            </div>
+            <!-- 卡片3：人设关联度 -->
+            <div class="card" data-index="2">
+                <div class="card-num">维度 3/5</div>
+                <h2>🤝 人设关联度</h2>
+                <div class="question">老粉刷到你卖这个，会觉得“就该你卖”吗？</div>
+                <div class="hint">💬 你是美食博主卖锅正常，突然卖保险就会掉粉。<br>品和你账号的脸，必须长得像。</div>
+                <div class="btn-group">
+                    <button class="btn btn-no" onclick="answer(2, false)">🤔 有点牵强</button>
+                    <button class="btn btn-yes" onclick="answer(2, true)">🎯 天生就该我卖</button>
+                </div>
+            </div>
+            <!-- 卡片4：体验惊喜值 -->
+            <div class="card" data-index="3">
+                <div class="card-num">维度 4/5</div>
+                <h2>✨ 体验惊喜值</h2>
+                <div class="question">你自己用的时候，有没有“哇”那一瞬间？</div>
+                <div class="hint">💬 超过预期的那个点，才是粉丝帮你免费吹牛逼的理由。<br>无功无过的产品，是在消耗你的信任额度。</div>
+                <div class="btn-group">
+                    <button class="btn btn-no" onclick="answer(3, false)">😐 就还行</button>
+                    <button class="btn btn-yes" onclick="answer(3, true)">🤩 真的有“哇”</button>
+                </div>
+            </div>
+            <!-- 卡片5：售后无忧性 -->
+            <div class="card" data-index="4">
+                <div class="card-num">维度 5/5</div>
+                <h2>🛡️ 售后无忧性</h2>
+                <div class="question">卖完这个品，你能睡安稳觉吗？</div>
+                <div class="hint">💬 尺码主观、易破损、需要安装的品，售后会把利润吃光。<br>一次性、标准消耗品，才能让你轻松数钱。</div>
+                <div class="btn-group">
+                    <button class="btn btn-no" onclick="answer(4, false)">😰 肯定一堆事</button>
+                    <button class="btn btn-yes" onclick="answer(4, true)">😴 稳睡到天亮</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页 -->
+        <div class="result" id="resultPage">
+            <div class="big-emoji" id="resultEmoji"></div>
+            <h3 id="resultTitle"></h3>
+            <div class="detail" id="resultDetail"></div>
+            <button class="restart-btn" onclick="restart()">🔄 重新测下一个品</button>
+        </div>
+
+        <div class="footer">
+            选品五维安检门 · 达人专用 · 只看品本身
+        </div>
+    </div>
+
+    <script>
+        // 维度数据
+        const dimensions = [
+            { name: '视觉可拍性', passIcon: '📸', failIcon: '🚫' },
+            { name: '场景普适性', passIcon: '🔄', failIcon: '📉' },
+            { name: '人设关联度', passIcon: '🤝', failIcon: '⚠️' },
+            { name: '体验惊喜值', passIcon: '✨', failIcon: '😐' },
+            { name: '售后无忧性', passIcon: '🛡️', failIcon: '🧨' }
+        ];
+
+        // 用户答案：true=通过，false=不通过
+        let answers = [];
+        let currentCardIndex = 0;
+
+        const cards = document.querySelectorAll('.card');
+        const progressFill = document.getElementById('progressFill');
+        const resultPage = document.getElementById('resultPage');
+
+        function updateProgress() {
+            let answered = answers.length;
+            let percent = (answered / 5) * 100;
+            progressFill.style.width = percent + '%';
+        }
+
+        function showCard(index) {
+            cards.forEach(card => card.classList.remove('active'));
+            if (index < cards.length) {
+                cards[index].classList.add('active');
+                cards[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function answer(index, isPass) {
+            answers[index] = isPass;
+            updateProgress();
+
+            if (index + 1 < 5) {
+                currentCardIndex = index + 1;
+                showCard(currentCardIndex);
+            } else {
+                // 所有维度回答完毕，展示结果
+                showResult();
+            }
+        }
+
+        function showResult() {
+            // 隐藏所有卡片
+            cards.forEach(card => card.classList.remove('active'));
+            document.getElementById('cardsContainer').style.display = 'none';
+            
+            // 检查是否全部通过
+            const allPassed = answers.every(a => a === true);
+            const failDims = [];
+            answers.forEach((a, idx) => {
+                if (!a) {
+                    failDims.push(dimensions[idx]);
+                }
+            });
+
+            let emoji, title, detailHtml;
+            if (allPassed) {
+                emoji = '🎉';
+                title = '恭喜！这品是“放心品”';
+                detailHtml = '✅ 五道安检全部通关。<br><br>这个品天生就适合你，也适合抖音。<br>可以进入下一步：去看数据、谈佣金、写脚本。<br><br>记住：不是所有品都配得上你的账号，但这一个，可以冲。';
+            } else {
+                emoji = '🛑';
+                title = '劝退！这品不适合你';
+                detailHtml = '❌ 以下维度没通过安检：<br><br>';
+                failDims.forEach(d => {
+                    detailHtml += `• <strong>${d.name}</strong> ${d.failIcon}<br>`;
+                });
+                detailHtml += '<br>不管坑位费多高、商家说得多好听，<br>请直接放弃这个品。<br><br>下一个品，会更乖。';
+            }
+
+            document.getElementById('resultEmoji').textContent = emoji;
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultDetail').innerHTML = detailHtml;
+            resultPage.classList.add('active');
+            resultPage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            updateProgress();
+        }
+
+        function restart() {
+            answers = [];
+            currentCardIndex = 0;
+            document.getElementById('cardsContainer').style.display = 'block';
+            cards.forEach(card => card.classList.remove('active'));
+            cards[0].classList.add('active');
+            resultPage.classList.remove('active');
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 初始化
+        updateProgress();
+    </script>
+</body>
+</html>
