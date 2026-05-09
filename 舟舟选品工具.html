@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>舟舟5维单品打爆选品工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FBBF24',
+                        primaryDark: '#F59E0B',
+                        secondary: '#1F2937',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+            .nav-active {
+                color: #F59E0B;
+                border-bottom: 2px solid #F59E0B;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20">
+    <!-- 顶部固定栏 -->
+    <header class="bg-white sticky top-0 z-40 card-shadow">
+        <div class="max-w-lg mx-auto px-4 py-4">
+            <div class="text-center">
+                <h1 class="text-xl font-bold text-secondary">舟舟5维单品打爆选品工具</h1>
+                <p class="text-xs text-gray-500 mt-1">先过5关，再看数据，新手选品零踩坑</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容容器 -->
+    <main class="max-w-lg mx-auto px-4 py-6">
+        <!-- 页面模块切换 -->
+        <div id="page-test" class="page-block">
+            <!-- 5维选品递进式流程 -->
+            <div id="step-container">
+                <!-- 步骤1：自我适配度 -->
+                <div id="step-1" class="step-block bg-white rounded-2xl card-shadow p-6 mb-6">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primaryDark rounded-full text-xs font-medium">第1关 · 核心基石</span>
+                        <h2 class="text-lg font-bold text-secondary mt-2">1. 自我适配度：你自己是不是真的在用它？</h2>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">这是最最基础的第一关，不用看任何数据，你自己心里最清楚。这个品，你是不是自己天天用？是不是真心觉得它好用、不踩坑？有没有实打实的使用感受能说？</p>
+                    <p class="text-red-500 text-xs font-medium mb-4">⚠️ 避坑提示：不用管别人说这个品多火，如果你自己都没用过，你拍出来的内容一定是假的，用户一眼就能看穿！</p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step1" value="1" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">符合</p>
+                                <p class="text-xs text-gray-500">我长期真实自用，能说出使用细节，真心认可这个产品</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step1" value="0" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">不符合</p>
+                                <p class="text-xs text-gray-500">我没有自用，只是觉得这个品火，想跟风带货</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button onclick="nextStep(1)" class="w-full bg-primary hover:bg-primaryDark text-white font-medium py-3 px-6 rounded-xl transition-all">
+                        进入下一关
+                    </button>
+                </div>
+
+                <!-- 步骤2：高频刚需属性 -->
+                <div id="step-2" class="step-block hidden bg-white rounded-2xl card-shadow p-6 mb-6">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primaryDark rounded-full text-xs font-medium">第2关 · 打爆基础</span>
+                        <h2 class="text-lg font-bold text-secondary mt-2">2. 高频刚需属性：它是不是普通人天天离不开的？</h2>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">不用想那些花里胡哨的小众品，就问自己：这个东西，是不是大多数人每天/每周都要用到的？是不是能解决一个大家都有的小痛点？</p>
+                    <p class="text-red-500 text-xs font-medium mb-4">⚠️ 避坑提示：别选那种一年用一次、可有可无的东西，也别选那种只有少数人才需要的冷门品，受众太窄，你根本做不起来！</p>
+                    <p class="text-xs text-gray-500 mb-4">✅ 参考案例：比如牙膏、水杯、美瞳，都是每天都要用的，没人能离得开，这就是高频刚需。</p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step2" value="1" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">符合</p>
+                                <p class="text-xs text-gray-500">大众日常高频使用，解决通用痛点，全年可稳定销售</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step2" value="0" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">不符合</p>
+                                <p class="text-xs text-gray-500">小众/季节性/低频使用，只有少数人有需求</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="prevStep(2)" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-xl transition-all">
+                            上一步
+                        </button>
+                        <button onclick="nextStep(2)" class="w-2/3 bg-primary hover:bg-primaryDark text-white font-medium py-3 px-6 rounded-xl transition-all">
+                            进入下一关
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步骤3：内容可延展性 -->
+                <div id="step-3" class="step-block hidden bg-white rounded-2xl card-shadow p-6 mb-6">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primaryDark rounded-full text-xs font-medium">第3关 · 内容核心</span>
+                        <h2 class="text-lg font-bold text-secondary mt-2">3. 内容可延展性：你能不能围绕它拍20条以上不重样的视频？</h2>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">做单品打爆，你要拍几百条视频，所以这个品能不能撑得起内容，太重要了。你先花1分钟想一下：围绕这个品，你能想出多少个不同的拍摄角度、场景、痛点？</p>
+                    <p class="text-red-500 text-xs font-medium mb-4">⚠️ 避坑提示：要是你想了半天，只能想出1、2个拍摄角度，那这个品别选——你拍两条就没东西可拍了，根本做不了单品打爆！</p>
+                    <p class="text-xs text-gray-500 mb-4">✅ 参考案例：比如一个水杯：你能拍办公室用、家里用、出门带、装热水、装冰水、防摔、颜值、收纳、给孩子用、出差带...随随便便就能想出几十个内容。</p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step3" value="1" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">符合</p>
+                                <p class="text-xs text-gray-500">能拆解出20+不同拍摄场景、痛点、角度，支撑长期内容更新</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step3" value="0" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">不符合</p>
+                                <p class="text-xs text-gray-500">只能想出少数几个拍摄角度，内容很快就会枯竭</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="prevStep(3)" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-xl transition-all">
+                            上一步
+                        </button>
+                        <button onclick="nextStep(3)" class="w-2/3 bg-primary hover:bg-primaryDark text-white font-medium py-3 px-6 rounded-xl transition-all">
+                            进入下一关
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步骤4：人群匹配度 -->
+                <div id="step-4" class="step-block hidden bg-white rounded-2xl card-shadow p-6 mb-6">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primaryDark rounded-full text-xs font-medium">第4关 · 转化核心</span>
+                        <h2 class="text-lg font-bold text-secondary mt-2">4. 人群匹配度：买它的人，是不是你的人？</h2>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">这个品的目标买家，和你自己、你的粉丝，是不是同一拨人？</p>
+                    <p class="text-red-500 text-xs font-medium mb-4">⚠️ 避坑提示：人群不对，品再好也卖不动！比如你是学生，跑去卖中老年保健品，那肯定不对——你的粉丝根本不需要。</p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step4" value="1" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">符合</p>
+                                <p class="text-xs text-gray-500">产品目标人群和我的人设、圈层、粉丝完全匹配</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step4" value="0" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">不符合</p>
+                                <p class="text-xs text-gray-500">产品目标人群和我的人设、圈层不匹配</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="prevStep(4)" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-xl transition-all">
+                            上一步
+                        </button>
+                        <button onclick="nextStep(4)" class="w-2/3 bg-primary hover:bg-primaryDark text-white font-medium py-3 px-6 rounded-xl transition-all">
+                            进入下一关
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步骤5：低决策门槛 -->
+                <div id="step-5" class="step-block hidden bg-white rounded-2xl card-shadow p-6 mb-6">
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 bg-primary/10 text-primaryDark rounded-full text-xs font-medium">第5关 · 出单核心</span>
+                        <h2 class="text-lg font-bold text-secondary mt-2">5. 低决策门槛：它的价格，是不是用户随手就能买的？</h2>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">对我们素人来说，别一上来就选大几百上千的品，你没有头部达人那么强的信任背书，太贵的品，用户刷到你的视频，要犹豫半天，根本不敢下单。</p>
+                    <p class="text-red-500 text-xs font-medium mb-4">⚠️ 避坑提示：就选那种一杯奶茶、一顿快餐钱的品，几十块钱，用户看完你的视频，觉得“哦，这个好用，反正也不贵，买一个试试”，随手就下单了，根本不用纠结！</p>
+                    
+                    <div class="space-y-3 mb-6">
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step5" value="1" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">符合</p>
+                                <p class="text-xs text-gray-500">客单价亲民，几十元区间，用户无需纠结可随手下单</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition-all">
+                            <input type="radio" name="step5" value="0" class="mt-1 w-4 h-4 text-primary focus:ring-primary">
+                            <div>
+                                <p class="font-medium text-secondary">不符合</p>
+                                <p class="text-xs text-gray-500">高客单价，用户决策成本高，下单犹豫</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="prevStep(5)" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-xl transition-all">
+                            上一步
+                        </button>
+                        <button onclick="getResult()" class="w-2/3 bg-primary hover:bg-primaryDark text-white font-medium py-3 px-6 rounded-xl transition-all">
+                            生成选品诊断结果
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 结果弹窗 -->
+                <div id="result-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div class="bg-white rounded-2xl card-shadow p-6 max-w-sm w-full">
+                        <div id="result-content" class="text-center">
+                            <!-- 结果内容动态生成 -->
+                        </div>
+                        <div class="mt-6 space-y-3">
+                            <button onclick="resetTest()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-xl transition-all">
+                                重新测品
+                            </button>
+                            <button onclick="switchPage('page-service')" class="w-full bg-primary hover:bg-primaryDark text-white font-medium py-2 px-4 rounded-xl transition-all">
+                                进入圈子获取专属服务
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 选品日历页面 -->
+        <div id="page-calendar" class="page-block hidden">
+            <div class="bg-white rounded-2xl card-shadow p-6 mb-6">
+                <h2 class="text-lg font-bold text-secondary mb-4">2026年选品日历</h2>
+                <p class="text-gray-500 text-sm mb-6">每月更新符合5维选品标准的刚需品类，完全不看热度，只推适合素人深耕的打爆品</p>
+                
+                <!-- 每周更新内容区 -->
+                <div class="space-y-4">
+                    <div class="p-4 border border-primary/20 bg-primary/5 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-secondary">2026年6月 推荐品类</span>
+                            <span class="text-xs bg-primary/20 text-primaryDark px-2 py-1 rounded-full">最新更新</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✅ AI语音便签笔（5维全达标，职场/学生双人群，内容可拍100+条）</li>
+                            <li>✅ 便携冷泡茶壶（夏季刚需，户外/办公室/居家多场景，客单价39元）</li>
+                            <li>✅ 宠物自动喂食器mini版（养宠人群刚需，低决策门槛，复购率高）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-secondary">2026年5月 推荐品类</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">已更新</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✅ 轻养生便携艾灸贴（全人群覆盖，痛点强，内容易出爆款）</li>
+                            <li>✅ 户外折叠防晒帽（夏季爆款，颜值+功能双在线，转化高）</li>
+                            <li>✅ 母婴分阶辅食勺（宝妈精准人群，复购强，信任度高）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-secondary">2026年4月 推荐品类</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">已更新</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✅ 桌面迷你加湿器（春季刚需，办公室/卧室必备，客单价低）</li>
+                            <li>✅ 免手洗懒人拖把（家居清洁痛点，内容对比性强，易出单）</li>
+                            <li>✅ 儿童防蓝光眼镜（家长焦虑点，人群精准，利润空间大）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-secondary">2026年3月 推荐品类</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">已更新</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✅ 便携折叠购物车（买菜/取快递刚需，全年龄段覆盖）</li>
+                            <li>✅ 植物精油驱蚊贴（春季提前布局，夏季持续爆单）</li>
+                            <li>✅ 职场解压捏捏乐（情绪价值好物，内容易传播，转化高）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-secondary">2026年2月 推荐品类</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">已更新</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✅ 家用智能感应垃圾桶（家居升级刚需，内容展示性强）</li>
+                            <li>✅ 便携暖手宝充电宝（二合一功能，冬季收尾爆款）</li>
+                            <li>✅ 新年开运红绳（节日属性，低客单价，冲动消费强）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-secondary">2026年1月 推荐品类</span>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">已更新</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>✅ 年货坚果大礼包（节日刚需，客单价适中，复购高）</li>
+                            <li>✅ 家用除螨仪（春节大扫除痛点，内容对比性强）</li>
+                            <li>✅ 儿童新年汉服（节日属性，宝妈人群精准，利润高）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 打爆案例页面 -->
+        <div id="page-case" class="page-block hidden">
+            <div class="bg-white rounded-2xl card-shadow p-6 mb-6">
+                <h2 class="text-lg font-bold text-secondary mb-4">素人打爆案例库</h2>
+                <p class="text-gray-500 text-sm mb-6">所有案例均符合5维选品标准，素人零粉丝起号，靠单品打爆实现稳定变现</p>
+                
+                <!-- 案例列表 -->
+                <div class="space-y-4">
+                    <div class="p-4 border border-gray-100 rounded-xl hover:border-primary/20 transition-all">
+                        <h3 class="font-bold text-secondary">@林林呀 - 水杯单品40万+单</h3>
+                        <div class="mt-2 text-sm text-gray-600 space-y-1">
+                            <p>📊 5维得分：满分5项全达标</p>
+                            <p>✅ 实操路径：自用真实分享，多场景持续输出，3个月打爆单品</p>
+                            <p>💡 可复制点：聚焦刚需品，持续刷脸，不跟风换品</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border border-gray-100 rounded-xl hover:border-primary/20 transition-all">
+                        <h3 class="font-bold text-secondary">@李九九 - 美瞳单品100万+单</h3>
+                        <div class="mt-2 text-sm text-gray-600 space-y-1">
+                            <p>📊 5维得分：满分5项全达标</p>
+                            <p>✅ 实操路径：精准匹配年轻女生人群，真实上眼体验，持续内容迭代</p>
+                            <p>💡 可复制点：人设与产品高度匹配，内容有真实体验感</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border border-gray-100 rounded-xl hover:border-primary/20 transition-all">
+                        <h3 class="font-bold text-secondary">@简溪吖 - 口腔好物200万+单</h3>
+                        <div class="mt-2 text-sm text-gray-600 space-y-1">
+                            <p>📊 5维得分：满分5项全达标</p>
+                            <p>✅ 实操路径：聚焦大众高频刚需，痛点场景全覆盖，稳定日更</p>
+                            <p>💡 可复制点：刚需品+强痛点，持续深耕不换品</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行业动态页面 -->
+        <div id="page-news" class="page-block hidden">
+            <div class="bg-white rounded-2xl card-shadow p-6 mb-6">
+                <h2 class="text-lg font-bold text-secondary mb-4">2026年行业动态与合规解读</h2>
+                <p class="text-gray-500 text-sm mb-6">第一时间更新抖音带货新规、赛道趋势、风险预警，帮你避开违规踩坑</p>
+                
+                <!-- 动态列表 -->
+                <div class="space-y-4">
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-secondary">2026年AI生成内容合规新规</h3>
+                            <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">重要</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">2026年3月最新执行：所有AI生成的带货视频、图文，必须在显著位置标注“AI生成”字样，包括AI数字人、AI配音、AI剪辑的内容。未标注的视频将被限流，多次违规将限制账号带货权限。</p>
+                        <p class="text-xs text-primaryDark font-medium">✅ 应对建议：AI内容在视频开头3秒内用文字标注“AI演示”，简介里补充说明，避免违规。</p>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-secondary">抖音电商全面推行一物一码溯源</h3>
+                            <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">必看</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">2026年1月起，食品、美妆、母婴、保健品四大品类全面推行一物一码溯源制度。达人带货时必须展示产品溯源码，用户扫码可查看生产、运输、质检全流程。无溯源码的产品禁止上架带货。</p>
+                        <p class="text-xs text-primaryDark font-medium">✅ 应对建议：选品时优先选择有溯源码的商家，视频中增加1-2秒展示溯源码的镜头，提升用户信任。</p>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-secondary">虚拟人带货资质要求升级</h3>
+                            <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">必看</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">2026年5月新规：使用虚拟人进行带货直播或短视频，必须提前在平台备案虚拟人身份信息，包括形象来源、版权证明、运营主体。未备案的虚拟人内容将被下架，情节严重的封禁账号。</p>
+                        <p class="text-xs text-primaryDark font-medium">✅ 应对建议：素人优先做真人出镜内容，如需使用虚拟人，务必提前完成平台备案。</p>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-secondary">2026年电商赛道趋势解读</h3>
+                            <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">趋势</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">1. 情绪价值类产品爆发：解压、治愈、提升幸福感的产品增速超过300%；2. 银发经济崛起：50-65岁人群消费力提升，健康、便捷类产品需求旺盛；3. 私域复购成为核心：平台鼓励达人引导粉丝进群，私域订单佣金比例提升10%。</p>
+                        <p class="text-xs text-primaryDark font-medium">✅ 应对建议：重点布局情绪价值和银发经济赛道，同时搭建自己的私域社群，提升复购率。</p>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-100 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-secondary">普通食品宣传红线更新</h3>
+                            <span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">重要</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">2026年最新补充：普通食品禁止使用“调理、改善、养护、增强抵抗力”等暗示功效的词汇，包括谐音梗（如“养喂”代替“养胃”）。同时禁止展示前后对比图、用户证言等内容。</p>
+                        <p class="text-xs text-primaryDark font-medium">✅ 应对建议：带货话术只讲口感、配料、食用场景，提前用违规词检测工具自查文案。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 圈子服务页面 -->
+        <div id="page-service" class="page-block hidden">
+            <!-- VIP解锁功能 -->
+            <div class="bg-white rounded-2xl card-shadow p-6 mb-6">
+                <h2 class="text-lg font-bold text-secondary mb-4">圈子专属VIP服务</h2>
+                <p class="text-gray-500 text-sm mb-6">输入圈子专属解锁码，即可解锁VIP专属功能</p>
+                
+                <div class="mb-4">
+                    <input type="password" id="vip-code" placeholder="请输入圈子专属解锁码" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+                </div>
+                <button onclick="checkVipCode()" class="w-full bg-primary hover:bg-primaryDark text-white font-medium py-3 px-6 rounded-xl transition-all mb-6">
+                    解锁VIP专属功能
+                </button>
+
+                <div id="vip-content" class="hidden space-y-4">
+                    <div class="p-4 border border-primary/20 bg-primary/5 rounded-xl">
+                        <h3 class="font-bold text-secondary">✅ 一对一选品诊断</h3>
+                        <p class="text-sm text-gray-600 mt-1">专属运营一对一帮你做选品诊断，筛选你的本命打爆品</p>
+                    </div>
+                    <div class="p-4 border border-primary/20 bg-primary/5 rounded-xl">
+                        <h3 class="font-bold text-secondary">✅ 专属打品方案生成</h3>
+                        <p class="text-sm text-gray-600 mt-1">针对你的品，定制专属打品方案、脚本模板、发布节奏</p>
+                    </div>
+                    <div class="p-4 border border-primary/20 bg-primary/5 rounded-xl">
+                        <h3 class="font-bold text-secondary">✅ 优质商家资源对接</h3>
+                        <p class="text-sm text-gray-600 mt-1">对接高佣金、高履约、低售后的优质商家资源</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 圈子交流入口 -->
+            <div class="bg-white rounded-2xl card-shadow p-6 mb-6">
+                <h2 class="text-lg font-bold text-secondary mb-4">圈子交流社群</h2>
+                <p class="text-gray-500 text-sm mb-4">加入专属圈子社群，和同频的带货达人一起交流学习，获取最新干货、资源对接</p>
+                <button onclick="alert('圈子社群入口已配置，替换为你的社群二维码/链接即可')" class="w-full bg-secondary hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-xl transition-all">
+                    点击进入圈子社群
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部固定导航 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white card-shadow z-40">
+        <div class="max-w-lg mx-auto grid grid-cols-5 gap-1 px-2">
+            <button onclick="switchPage('page-test')" class="nav-btn py-3 flex flex-col items-center justify-center text-gray-500 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                选品自测
+            </button>
+            <button onclick="switchPage('page-calendar')" class="nav-btn py-3 flex flex-col items-center justify-center text-gray-500 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                选品日历
+            </button>
+            <button onclick="switchPage('page-case')" class="nav-btn py-3 flex flex-col items-center justify-center text-gray-500 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                打爆案例
+            </button>
+            <button onclick="switchPage('page-news')" class="nav-btn py-3 flex flex-col items-center justify-center text-gray-500 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                行业动态
+            </button>
+            <button onclick="switchPage('page-service')" class="nav-btn py-3 flex flex-col items-center justify-center text-gray-500 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                圈子服务
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // 全局变量
+        let currentStep = 1;
+        const totalStep = 5;
+        // 圈子专属解锁码，可自行修改
+        const vipCode = "zhouzhou2024";
+
+        // 页面切换
+        function switchPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page-block').forEach(block => {
+                block.classList.add('hidden');
+            });
+            // 显示目标页面
+            document.getElementById(pageId).classList.remove('hidden');
+            // 导航高亮
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('nav-active');
+            });
+            event.currentTarget.classList.add('nav-active');
+        }
+
+        // 步骤切换
+        function nextStep(step) {
+            // 检查是否选中
+            const selected = document.querySelector(`input[name="step${step}"]:checked`);
+            if (!selected) {
+                alert('请先选择符合/不符合，再进入下一步');
+                return;
+            }
+
+            // 一票否决：第1、2关不符合，直接终止
+            if (step === 1 && selected.value === "0") {
+                alert('根据5维选品逻辑，自我适配是第一关！没有真实自用体验的品，你拍不出真实内容，用户一眼就能看穿，不适合做单品打爆，建议你换品~');
+                return;
+            }
+            if (step === 2 && selected.value === "0") {
+                alert('根据5维选品逻辑，这个品不是大众高频刚需，受众太窄，撑不起长期打爆，别浪费时间啦，建议你换品~');
+                return;
+            }
+
+            // 隐藏当前步骤，显示下一步
+            document.getElementById(`step-${step}`).classList.add('hidden');
+            document.getElementById(`step-${step+1}`).classList.remove('hidden');
+            currentStep = step + 1;
+        }
+
+        function prevStep(step) {
+            // 隐藏当前步骤，显示上一步
+            document.getElementById(`step-${step}`).classList.add('hidden');
+            document.getElementById(`step-${step-1}`).classList.remove('hidden');
+            currentStep = step - 1;
+        }
+
+        // 生成结果
+        function getResult() {
+            // 检查所有步骤是否选中
+            let totalScore = 0;
+            let unMatchList = [];
+            const dimNames = [
+                "自我适配度",
+                "高频刚需属性",
+                "内容可延展性",
+                "人群匹配度",
+                "低决策门槛"
+            ];
+
+            for (let i = 1; i <= totalStep; i++) {
+                const selected = document.querySelector(`input[name="step${i}"]:checked`);
+                if (!selected) {
+                    alert('请完成所有选项，再生成结果');
+                    return;
+                }
+                const score = parseInt(selected.value);
+                totalScore += score;
+                if (score === 0) {
+                    unMatchList.push(dimNames[i-1]);
+                }
+            }
+
+            // 生成结果内容
+            const resultContent = document.getElementById('result-content');
+            if (totalScore === 5) {
+                resultContent.innerHTML = `
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">太棒了！本命打爆品</h3>
+                    <p class="text-gray-600 mb-2">这个品完全符合5维选品标准！</p>
+                    <p class="text-sm text-gray-500">无需跟风换品，可直接锁定深耕，接下来你就可以去选品广场，看它的销量、评分、佣金等第二步数据了~</p>
+                `;
+            } else if (totalScore >= 3) {
+                resultContent.innerHTML = `
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">潜力深耕品</h3>
+                    <p class="text-gray-600 mb-2">这个品核心维度达标，还有优化空间</p>
+                    <p class="text-sm text-red-500 font-medium mb-2">未达标维度：${unMatchList.join('、')}</p>
+                    <p class="text-xs text-gray-500">优化对应维度后，即可长期深耕打爆</p>
+                `;
+            } else {
+                resultContent.innerHTML = `
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">不建议深耕</h3>
+                    <p class="text-gray-600 mb-2">这个品不符合5维选品核心标准</p>
+                    <p class="text-sm text-red-500 font-medium mb-2">未达标维度：${unMatchList.join('、')}</p>
+                    <p class="text-xs text-gray-500">强行做易陷入内卷、不出单，建议直接换品，避免浪费时间精力</p>
+                `;
+            }
+
+            // 显示弹窗
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        // 重置测品
+        function resetTest() {
+            // 清空所有选项
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            // 隐藏弹窗
+            document.getElementById('result-modal').classList.add('hidden');
+            // 回到第一步
+            document.querySelectorAll('.step-block').forEach(block => {
+                block.classList.add('hidden');
+            });
+            document.getElementById('step-1').classList.remove('hidden');
+            currentStep = 1;
+        }
+
+        // VIP码校验
+        function checkVipCode() {
+            const inputCode = document.getElementById('vip-code').value;
+            if (inputCode === vipCode) {
+                document.getElementById('vip-content').classList.remove('hidden');
+                alert('解锁成功！已开通圈子VIP专属功能');
+            } else {
+                alert('解锁码错误，请输入圈子专属正确的解锁码');
+            }
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('result-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        // 页面初始化，默认显示选品自测页
+        document.addEventListener('DOMContentLoaded', function() {
+            switchPage('page-test');
+            document.querySelectorAll('.nav-btn')[0].classList.add('nav-active');
+        });
+    </script>
+</body>
+</html>
